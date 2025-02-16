@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discord Bot Documentation</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet" />
+  <style>
+    /* Base Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #f4f7f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    a {
+      color: #4A90E2;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    header, footer {
+      background: #4A90E2;
+      color: #fff;
+      text-align: center;
+      padding: 20px 10px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    footer p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    h2 {
+      border-bottom: 2px solid #4A90E2;
+      padding-bottom: 5px;
+      margin-bottom: 20px;
+    }
+    h3 {
+      margin-top: 0;
+    }
+    p {
+      margin: 10px 0;
+    }
+    ul {
+      margin: 10px 0 10px 20px;
+    }
+    code {
+      background: #e8e8e8;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #2d2d2d;
+      color: #ccc;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    
+    /* Section & Command Styles */
+    .section {
+      margin-bottom: 40px;
+    }
+    .command {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      background: #fafafa;
+    }
+    .command-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .command-header h3 {
+      margin: 0;
+    }
+    .command-header span {
+      font-size: 0.9em;
+      color: #666;
+    }
+    .example, .example-output {
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      font-style: italic;
+    }
+    .example {
+      background: #eef6fc;
+      border-left: 4px solid #4A90E2;
+    }
+    .example-output {
+      background: #e8f7ee;
+      border-left: 4px solid #28a745;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Discord Bot Documentation</h1>
+    <p>A comprehensive guide for understanding and using the Discord bot commands.</p>
+  </header>
+  <div class="container">
+    <!-- Introduction Section -->
+    <section id="introduction" class="section">
+      <h2>Introduction</h2>
+      <p>
+        This documentation provides an overview of a custom Discord bot developed using the <code>discord.py</code> library.
+        The bot includes a variety of commands for server management, message handling, role and channel synchronization, and more.
+      </p>
+      <p>
+        Additionally, the bot leverages several helper functions and external modules for tasks such as AI-powered renaming, webhook handling, and link management.
+      </p>
+    </section>
+
+    <!-- Setup Section -->
+    <section id="setup" class="section">
+      <h2>Setup & Dependencies</h2>
+      <p>To run this bot, ensure you have the following installed:</p>
+      <ul>
+        <li>Python 3.8 or later</li>
+        <li><code>discord.py</code> library</li>
+        <li>Modules: <code>requests</code>, <code>asyncio</code>, <code>jellyfish</code></li>
+        <li>Custom modules: <code>ai</code> (for <code>aichat</code>), <code>bypass</code>, <code>make_paste</code>, and <code>linkvertise</code></li>
+      </ul>
+      <p>
+        Update your bot token in the <code>bot.run()</code> call at the bottom of the code before running the bot.
+      </p>
+    </section>
+
+    <!-- Helper Functions -->
+    <section id="helper-functions" class="section">
+      <h2>Helper Functions</h2>
+      <h3><code>strip_emotes(text)</code></h3>
+      <p>
+        Removes Discord custom emoji tags and Unicode emojis from a given string.
+      </p>
+      <h3><code>discordify(text)</code></h3>
+      <p>
+        Converts text to a standardized format by lowercasing, replacing spaces with hyphens, and removing apostrophes.
+        Useful for channel name comparisons.
+      </p>
+      <h3><code>search(name)</code></h3>
+      <p>
+        Searches the <code>final.json</code> file for an entry with the matching <code>name</code> and returns the entry if found.
+      </p>
+      <h3><code>switch(command, argument, embed)</code></h3>
+      <p>
+        Applies various formatting commands to a Discord embed. Supported commands include:
+      </p>
+      <ul>
+        <li><code>title</code>: Sets the embed title.</li>
+        <li><code>description</code>: Sets the embed description.</li>
+        <li><code>color</code>: Sets the embed color (hex format expected).</li>
+        <li><code>image</code>: Adds an image to the embed.</li>
+        <li><code>thumbnail</code>: Adds a thumbnail image.</li>
+        <li><code>footer</code>: Sets the footer text.</li>
+        <li><code>field</code>: Adds a field (expects input in the format <code>Field Name | Field Value</code>).</li>
+      </ul>
+    </section>
+
+    <!-- Bot Commands -->
+    <section id="commands" class="section">
+      <h2>Bot Commands</h2>
+
+      <!-- Test Command -->
+      <div class="command" id="test">
+        <div class="command-header">
+          <h3><code>!test</code></h3>
+          <span>Test Command</span>
+        </div>
+        <p>
+          A simple command that prints the guild's icon URL to the console and sends a <code>test</code> message in the channel.
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!test</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> The bot sends a message <code>test</code> in the channel and logs the guild's icon URL in the console.
+        </div>
+      </div>
+
+      <!-- Scan Command -->
+      <div class="command" id="scan">
+        <div class="command-header">
+          <h3><code>!scan</code></h3>
+          <span>Scan Command</span>
+        </div>
+        <p>
+          Scans the last 30 messages in specified text channels and checks for any words that match entries in the <code>final.json</code> file.
+          If a match is found, the original message is deleted and a formatted notification is sent via a webhook.
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!scan</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> For any matched entry, a message like <code>@here [Name] - [URL]</code> is sent in the channel.
+        </div>
+      </div>
+
+      <!-- Send Command -->
+      <div class="command" id="send">
+        <div class="command-header">
+          <h3><code>!send</code></h3>
+          <span>Send Message / Embed Command</span>
+        </div>
+        <p>
+          Sends a regular message or an embed message depending on the provided arguments.
+        </p>
+        <p>
+          <strong>Usage:</strong> <code>!send [embed] &lt;parameters&gt;</code> or <code>!send &lt;message&gt;</code>
+        </p>
+        <ul>
+          <li>
+            For a plain message: <code>!send Hello world!</code>
+          </li>
+          <li>
+            For an embed message:
+            <br /><code>!send embed /title Welcome /description "This is an embed message." /color FF5733</code>
+          </li>
+        </ul>
+        <div class="example">
+          <strong>Example (Plain Message):</strong> <code>!send Hello everyone!</code>
+          <br />
+          <strong>Example (Embed):</strong> <code>!send embed /title Greetings /description "Welcome to our server!" /footer "Enjoy your stay."</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output (Plain Message):</strong> The bot sends "Hello everyone!" in the channel.
+          <br />
+          <strong>Expected Output (Embed):</strong> An embed is posted with the specified title, description, and footer.
+        </div>
+      </div>
+
+      <!-- Sync Command -->
+      <div class="command" id="sync">
+        <div class="command-header">
+          <h3><code>!sync</code></h3>
+          <span>Sync Command</span>
+        </div>
+        <p>
+          Exports the server’s structure (roles, categories, channels, permission overwrites, and recent messages) into a JSON file (<code>server_config.json</code>).
+        </p>
+        <p>
+          <strong>Usage:</strong> <code>!sync &lt;childID&gt; &lt;realtime&gt; &lt;overindex&gt;</code>
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!sync 12345 true 0</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> A message in the channel: "Server structure has been saved successfully!"
+        </div>
+      </div>
+
+      <!-- Load Command -->
+      <div class="command" id="load">
+        <div class="command-header">
+          <h3><code>!load</code></h3>
+          <span>Load &amp; Rename Command</span>
+        </div>
+        <p>
+          Loads a saved server configuration file and applies an AI-powered renaming process to update category and channel names.
+          The <code>aichat</code> function is used to generate new styled names while preserving the original content.
+        </p>
+        <p>
+          <strong>Usage:</strong> <code>!load &lt;configFile&gt;</code>
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!load server_config.json</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> The renaming process is initiated (in a background thread). There may be no immediate message output.
+        </div>
+      </div>
+
+      <!-- Imports Command -->
+      <div class="command" id="imports">
+        <div class="command-header">
+          <h3><code>!imports</code></h3>
+          <span>Import Server Structure</span>
+        </div>
+        <p>
+          Recreates the server structure from a JSON configuration file. This command creates or updates roles, categories, and channels,
+          applies permission overwrites, and reposts messages via webhooks.
+        </p>
+        <p>
+          <strong>Usage:</strong> <code>!imports &lt;configFile&gt;</code>
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!imports server_config.json</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> A message in the channel: "Server structure has been loaded successfully!"
+        </div>
+      </div>
+
+      <!-- Fullwipe Command -->
+      <div class="command" id="fullwipe">
+        <div class="command-header">
+          <h3><code>!fullwipe</code></h3>
+          <span>Full Wipe Command</span>
+        </div>
+        <p>
+          Deletes all text channels, voice channels, categories, and roles (except for <code>@everyone</code>) in the server.
+          <strong>Warning:</strong> Use this command with extreme caution.
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!fullwipe</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> The bot deletes the channels, roles, and categories, and then sends "Server wiped!".
+        </div>
+      </div>
+
+      <!-- Correct Command -->
+      <div class="command" id="correct">
+        <div class="command-header">
+          <h3><code>!correct</code></h3>
+          <span>Correction Command</span>
+        </div>
+        <p>
+          Checks every text channel defined in a configuration file and ensures that every message listed in the file is present.
+          If a message is missing, it is resent via a webhook.
+        </p>
+        <p>
+          <strong>Usage:</strong> <code>!correct &lt;configFile&gt;</code>
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!correct server_config.json</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> A message in the channel: "Correction completed successfully!"
+        </div>
+      </div>
+
+      <!-- Link Command -->
+      <div class="command" id="link">
+        <div class="command-header">
+          <h3><code>!link</code></h3>
+          <span>Link Management Command</span>
+        </div>
+        <p>
+          Handles link conversion and posting. It supports several subcommands:
+        </p>
+        <ul>
+          <li>
+            <code>link</code>: Converts a Linkvertise URL using bypass and paste services, then posts it via a webhook.
+            <br /><strong>Usage:</strong> <code>!link link &lt;linkvertise_url&gt; &lt;name&gt; [--push]</code>
+          </li>
+          <li>
+            <code>normal</code>: Sends a regular message via webhook.
+            <br /><strong>Usage:</strong> <code>!link normal &lt;message&gt;</code>
+          </li>
+          <li>
+            <code>db</code>: Searches the local database for a name and posts the associated link.
+            <br /><strong>Usage:</strong> <code>!link db &lt;name&gt;</code>
+          </li>
+        </ul>
+        <div class="example">
+          <strong>Example (Link Conversion):</strong> <code>!link link https://linkvertise.com/abc123 "My Cool Link"</code>
+          <br />
+          <strong>Example (Normal):</strong> <code>!link normal This is a test message</code>
+          <br />
+          <strong>Example (DB):</strong> <code>!link db MyCoolLink</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output (Link Conversion):</strong> A message like <code>@here My Cool Link - [Converted URL]</code> is sent.
+          <br />
+          <strong>Expected Output (Normal):</strong> The bot sends the provided message via a webhook.
+          <br />
+          <strong>Expected Output (DB):</strong> The bot sends a message with the link associated with "MyCoolLink".
+        </div>
+      </div>
+
+      <!-- Synchro Command -->
+      <div class="command" id="synchro">
+        <div class="command-header">
+          <h3><code>!synchro</code></h3>
+          <span>Channel Synchronization Command</span>
+        </div>
+        <p>
+          Aggregates channel IDs from all guilds and logs the list. It can limit the number of channels processed if desired.
+        </p>
+        <p>
+          <strong>Usage:</strong> <code>!synchro [channels]</code>
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!synchro 5</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> The bot logs the list of channel IDs to the console and sends a message "Synchro finished!".
+        </div>
+      </div>
+
+      <!-- Syn Command -->
+      <div class="command" id="syn">
+        <div class="command-header">
+          <h3><code>!syn</code></h3>
+          <span>Preset Management Command</span>
+        </div>
+        <p>
+          Manages channel presets across multiple servers. The subcommands include:
+        </p>
+        <ul>
+          <li><code>presetadd &lt;name&gt;</code>: Creates a new preset with the current channel.</li>
+          <li><code>presetchan &lt;name or index&gt;</code>: Adds the current channel to an existing preset.</li>
+          <li><code>presetshow</code>: Displays all available presets.</li>
+        </ul>
+        <div class="example">
+          <strong>Example (Add Preset):</strong> <code>!syn presetadd MyPreset</code>
+          <br />
+          <strong>Example (Add Channel to Preset):</strong> <code>!syn presetchan MyPreset</code>
+          <br />
+          <strong>Example (Show Presets):</strong> <code>!syn presetshow</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> A confirmation message is sent or the list of presets is displayed.
+        </div>
+      </div>
+
+      <!-- Wipehooks Command -->
+      <div class="command" id="wipehooks">
+        <div class="command-header">
+          <h3><code>!wipehooks</code></h3>
+          <span>Webhook Cleanup Command</span>
+        </div>
+        <p>
+          Deletes all webhooks across all text channels in every guild where the bot is active.
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!wipehooks</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> The bot deletes all webhooks and sends "All webhooks wiped!" in the channel.
+        </div>
+      </div>
+
+      <!-- Clear Command -->
+      <div class="command" id="clear">
+        <div class="command-header">
+          <h3><code>!clear</code></h3>
+          <span>Clear Chat Command</span>
+        </div>
+        <p>
+          Clears the last 100 messages from the current text channel.
+        </p>
+        <div class="example">
+          <strong>Example:</strong> <code>!clear</code>
+        </div>
+        <div class="example-output">
+          <strong>Expected Output:</strong> The bot clears the last 100 messages (output is visible by the change in chat history).
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusion Section -->
+    <section id="conclusion" class="section">
+      <h2>Conclusion</h2>
+      <p>
+        This Discord bot offers extensive functionality for server management, channel synchronization, and automated message handling using webhooks.
+        Its modular design allows for easy customization and integration with external services such as AI renaming and link conversion.
+      </p>
+      <p>
+        For further customization, refer to the code comments and adjust the helper functions or command logic as needed.
+      </p>
+    </section>
+  </div>
+  <footer>
+    <p>&copy; 2025 Discord Bot Documentation. All rights reserved.</p>
+  </footer>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>
